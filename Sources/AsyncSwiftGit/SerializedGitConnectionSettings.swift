@@ -4,7 +4,7 @@ import CryptoKit
 import Foundation
 
 /// Serialization container for ``GitConnectionSettings``
-public enum SerializedGitConnectionSettings: Codable {
+public enum SerializedGitConnectionSettings: Codable, Sendable {
   case plaintext(settings: GitConnectionSettings)
   case passwordProtected(data: Data)
 

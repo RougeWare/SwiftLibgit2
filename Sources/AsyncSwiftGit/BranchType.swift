@@ -4,7 +4,7 @@ import Clibgit2
 import Foundation
 
 /// A type of branch.
-public struct BranchType: OptionSet {
+public struct BranchType: OptionSet, Sendable {
   public var rawValue: UInt32
 
   public init(rawValue: UInt32) {

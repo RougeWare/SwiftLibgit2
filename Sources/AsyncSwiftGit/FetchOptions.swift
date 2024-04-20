@@ -4,7 +4,7 @@ import Clibgit2
 import Foundation
 
 /// A structure to report on fetching progress.
-public struct FetchProgress: Equatable {
+public struct FetchProgress: Equatable, Sendable {
   public let receivedObjects: Int
   public let indexedObjects: Int
   public let totalObjects: Int
@@ -25,7 +25,7 @@ public struct FetchProgress: Equatable {
   }
 }
 
-public enum FetchPruneOption {
+public enum FetchPruneOption: Sendable {
   case unspecified
   case prune
   case noPrune

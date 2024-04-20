@@ -13,14 +13,14 @@ public extension CodingUserInfoKey {
 /// You can determine if the contents of this type are valid for synchronization by using ``isValid``.
 ///
 /// If the type is valid, you can get ``Credentials`` for connection and a ``Signature`` for authoring commits.
-public struct GitConnectionSettings: Codable, Equatable {
-  public enum AuthenticationType: String, Codable {
+public struct GitConnectionSettings: Codable, Equatable, Sendable {
+  public enum AuthenticationType: String, Codable, Sendable {
     case usernamePassword = "https" // There are serialized versions of settings that called this "https"
     case ssh
     case none
   }
 
-  public struct SSHKeyPair: Codable, Equatable {
+  public struct SSHKeyPair: Codable, Equatable, Sendable {
     public var publicKey = ""
     public var privateKey = ""
 

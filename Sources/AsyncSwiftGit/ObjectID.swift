@@ -4,7 +4,7 @@ import Clibgit2
 import Foundation
 
 /// Make a `git_oid` more Swifty
-public struct ObjectID: CustomStringConvertible, Hashable {
+public struct ObjectID: CustomStringConvertible, Hashable, Sendable {
   init(_ oid: git_oid) {
     self.oid = oid
   }

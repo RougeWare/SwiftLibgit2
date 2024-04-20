@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.0]
+
+* **Breaking change** Fix strict Swift concurrency warnings. This required removing the `async` methods
+from `Repository` and making them be extensions on `AsyncThrowingStream` and `FetchProgressStream` instead.
+
 ## [0.4.0]
 
 * Add code to serialize Git connection settings

@@ -36,7 +36,7 @@ public protocol GitConflictResolver {
 }
 
 /// A value that represents progress towards a goal.
-public enum Progress<ProgressType, ResultType> {
+public enum Progress<ProgressType: Sendable, ResultType: Sendable>: Sendable {
   /// Progress towards the goal, storing the progress value.
   case progress(ProgressType)
 
@@ -512,25 +512,6 @@ public final class Repository {
     return resultStream
   }
 
-  @discardableResult
-  /// Fetch from a named remote, waiting until the fetch is 100% complete before returning.
-  /// - Parameters:
-  ///   - remote: The remote to fetch
-  ///   - credentials: Credentials to use for the fetch.
-  /// - returns: The reference name for default branch for the remote.
-  public func fetch(remote: String, credentials: Credentials = .default) async throws -> String? {
-    var defaultBranch: String!
-    for try await progress in fetchProgress(remote: remote, credentials: credentials) {
-      switch progress {
-      case .completed(let branch):
-        defaultBranch = branch
-      default:
-        break
-      }
-    }
-    return defaultBranch
-  }
-
   /// Creates an `AsyncThrowingStream` that reports on the progress of checking out a reference.
   /// - Parameters:
   ///   - referenceShorthand: The reference to checkout. This can be a shorthand name (e.g., `main`) and git will resolve it using precedence rules to a full reference (`refs/heads/main`).
@@ -605,13 +586,6 @@ public final class Repository {
         }
       }
     }
-  }
-
-  public func checkout(
-    revspec: String,
-    checkoutStrategy: git_checkout_strategy_t = GIT_CHECKOUT_SAFE
-  ) async throws {
-    for try await _ in checkoutProgress(referenceShorthand: revspec, checkoutStrategy: checkoutStrategy) {}
   }
 
   /// The current set of ``StatusEntry`` structs that represent the current status of all items in the repository.
@@ -1346,6 +1320,35 @@ public final class Repository {
       git_diff_tree_to_tree(&pointer, repositoryPointer, oldTree?.treePointer, newTree?.treePointer, nil)
     })
     return Diff(diffPointer)
+  }
+}
+
+public enum FetchError: Error {
+  /// There was an unexpected error: The fetch stream did not complete.
+  case unexpectedError
+}
+
+public extension Repository.FetchProgressStream {
+  @discardableResult
+  /// Fetch the entire contents of the stream and return the default branch name for the remote.
+  /// - returns: The reference name for default branch for the remote.
+  func fetchAll() async throws -> String? {
+    for try await progress in self {
+      switch progress {
+      case .completed(let branch):
+        return branch
+      default:
+        break
+      }
+    }
+    throw FetchError.unexpectedError
+  }
+}
+
+public extension AsyncThrowingStream {
+  /// Waits until the given stream completes.
+  func complete() async throws {
+    for try await _ in self {}
   }
 }
 

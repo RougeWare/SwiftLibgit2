@@ -4,7 +4,7 @@ import Clibgit2
 import Foundation
 
 /// Mirrors `git_object_t` to be a little more swift-y
-public enum ObjectType: Int32 {
+public enum ObjectType: Int32, Sendable {
   /// Object can be any of the following
   case any = -2
 

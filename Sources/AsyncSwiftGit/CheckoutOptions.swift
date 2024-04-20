@@ -37,7 +37,7 @@ final class CheckoutOptions {
   }
 }
 
-public struct CheckoutProgress: CustomStringConvertible {
+public struct CheckoutProgress: CustomStringConvertible, Sendable {
   public var path: String?
   public var completedSteps: Int
   public var totalSteps: Int

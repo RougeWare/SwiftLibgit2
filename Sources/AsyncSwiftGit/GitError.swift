@@ -4,7 +4,7 @@ import Clibgit2
 import Foundation
 
 /// Represents an error from an internal Clibgit2 API call.
-public struct GitError: Error, CustomStringConvertible, LocalizedError {
+public struct GitError: Error, CustomStringConvertible, LocalizedError, Sendable {
   /// The numeric error code from the Git API.
   public let errorCode: Int32
 

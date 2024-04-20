@@ -10,7 +10,7 @@ private class Wrapper<T> {
   }
 }
 
-public enum Credentials {
+public enum Credentials: Sendable {
   case `default`
   case sshAgent
   case plaintext(username: String, password: String)

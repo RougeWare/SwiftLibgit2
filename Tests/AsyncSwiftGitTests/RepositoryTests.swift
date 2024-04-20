@@ -67,7 +67,7 @@ final class RepositoryTests: XCTestCase {
     }
     let repository = try Repository(createAt: location, bare: false)
     try repository.addRemote("origin", url: URL(string: "https://github.com/bdewey/jubliant-happiness")!)
-    try await repository.fetch(remote: "origin")
+    try await repository.fetchProgress(remote: "origin").complete()
     for try await progress in repository.checkoutProgress(referenceShorthand: "origin/main") {
       print(progress)
     }
@@ -93,7 +93,7 @@ final class RepositoryTests: XCTestCase {
     let timeFromRepo = try repository.head!.commit.commitTime
     XCTAssertEqual(commitTime.timeIntervalSince1970, timeFromRepo.timeIntervalSince1970, accuracy: 1)
     try repository.addRemote("origin", url: URL(string: "https://github.com/bdewey/jubliant-happiness")!)
-    try await repository.fetch(remote: "origin")
+    try await repository.fetchProgress(remote: "origin").complete()
     var (ahead, behind) = try repository.commitsAheadBehind(other: "origin/main")
     XCTAssertEqual(ahead, 1)
     XCTAssertEqual(behind, 1)
@@ -135,7 +135,7 @@ final class RepositoryTests: XCTestCase {
       print("\(commit)")
       commitCount += 1
     }
-    XCTAssertEqual(commitCount, 9)
+    XCTAssertEqual(commitCount, 12)
   }
 
   func testTreeEnumeration() async throws {
@@ -217,7 +217,7 @@ final class RepositoryTests: XCTestCase {
     let clientRepository = try Repository(createAt: clientURL)
     let serverRepository = try Repository(createAt: serverURL)
     try clientRepository.addRemote("origin", url: serverURL)
-    try await clientRepository.fetch(remote: "origin")
+    try await clientRepository.fetchProgress(remote: "origin").complete()
     let initialTuple = try clientRepository.commitsAheadBehind(other: "origin/main")
     XCTAssertEqual(initialTuple.ahead, 0)
     XCTAssertEqual(initialTuple.behind, 0)
@@ -231,7 +231,7 @@ final class RepositoryTests: XCTestCase {
     try serverRepository.add()
     try serverRepository.commit(message: "test2", signature: Signature(name: "bkd", email: "noone@foo.com", time: Date()))
 
-    try await clientRepository.fetch(remote: "origin")
+    try await clientRepository.fetchProgress(remote: "origin").complete()
     let fetchedTuple = try clientRepository.commitsAheadBehind(other: "origin/main")
     XCTAssertEqual(fetchedTuple.ahead, 0)
     XCTAssertEqual(fetchedTuple.behind, 2)
