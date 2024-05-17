@@ -1,4 +1,4 @@
-// Copyright © 2022 Brian Dewey. Available under the MIT License, see LICENSE for details.
+// Copyright © 2022 Brian Dewey, 2024 Ky Leggiero. Available under the MIT License, see LICENSE for details.
 
 import Clibgit2
 import Foundation
@@ -396,9 +396,9 @@ public final class Repository {
   /// - Returns: The object ID for the reference.
   public func lookupReferenceID(referenceLongName: String) throws -> ObjectID? {
     do {
-      return try GitError.checkAndReturnOID(apiName: "git_reference_name_to_id", closure: { oid in
+      return try GitError.checkAndReturnOID(apiName: "git_reference_name_to_id") { oid in
         git_reference_name_to_id(&oid, repositoryPointer, referenceLongName)
-      })
+      }
     } catch let error as GitError {
       if error.errorCode == GIT_ENOTFOUND.rawValue {
         return nil
