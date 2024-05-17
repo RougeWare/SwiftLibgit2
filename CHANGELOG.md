@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.0] • 2024-05
+
+Adopted by Ky as a starting point to make a Git package of their own
+
+
+
 ## [0.5.0]
 
 * **Breaking change** Fix strict Swift concurrency warnings. This required removing the `async` methods

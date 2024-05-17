@@ -1,15 +1,15 @@
-// Copyright © 2022 Brian Dewey. Available under the MIT License, see LICENSE for details.
+// Copyright © 2022 Brian Dewey, 2024 Ky Leggiero. Available under the MIT License, see LICENSE for details.
 
 import Clibgit2
 import Foundation
 
 /// Make a `git_oid` more Swifty
 public struct ObjectID: CustomStringConvertible, Hashable, Sendable {
-  init(_ oid: git_oid) {
+  public init(_ oid: git_oid) {
     self.oid = oid
   }
 
-  init?(_ oidPointer: UnsafePointer<git_oid>?) {
+  public init?(_ oidPointer: UnsafePointer<git_oid>?) {
     guard let oid = oidPointer?.pointee else {
       return nil
     }

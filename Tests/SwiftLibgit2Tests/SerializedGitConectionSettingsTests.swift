@@ -1,6 +1,6 @@
-// Copyright © 2022 Brian Dewey. Available under the MIT License, see LICENSE for details.
+// Copyright © 2022 Brian Dewey, 2024 Ky Leggiero. Available under the MIT License, see LICENSE for details.
 
-import AsyncSwiftGit
+import SwiftLibgit2
 import XCTest
 
 final class SerializedGitConectionSettingsTests: XCTestCase {
