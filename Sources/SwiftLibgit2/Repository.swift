@@ -9,7 +9,7 @@ extension git_merge_preference_t: OptionSet {}
 
 private extension Logger {
   static let repository: Logger = {
-    var logger = Logger(label: "org.brians-brain.AsyncSwiftGit.Repository")
+    var logger = Logger(label: "me.kyleggiero.SwiftLibgit2.Repository")
     logger.logLevel = .debug
     logger[metadataKey: "subsystem"] = "repository"
     return logger
