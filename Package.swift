@@ -28,18 +28,26 @@ let package = Package(
               "static-libgit2",
               "Initializer",
               .product(name: "Logging", package: "swift-log"),
-            ],
-            swiftSettings: [
-                .unsafeFlags(["-warnings-as-errors"]),
             ]
         ),
         .target(name: "Initializer", dependencies: ["static-libgit2"]),
         .testTarget(
             name: "SwiftLibgit2Tests",
-            dependencies: ["SwiftLibgit2"],
-            swiftSettings: [
-              //        .unsafeFlags(["-warnings-as-errors"]),
-            ]
+            dependencies: ["SwiftLibgit2"]
         ),
     ]
 )
+
+#if DEBUG
+for target in package.targets {
+    target.swiftSettings = target.swiftSettings ?? []
+    target.swiftSettings?.append(
+        .unsafeFlags([
+            "-warnings-as-errors",
+            "-Xfrontend", "-warn-concurrency",
+            "-Xfrontend", "-enable-actor-data-race-checks",
+            "-enable-bare-slash-regex",
+        ])
+    )
+}
+#endif
